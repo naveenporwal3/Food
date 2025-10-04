@@ -1,16 +1,30 @@
 document.getElementById("orderForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  // In a real app, you’d send this to a server or Google Sheets
-  const food = this.food.value;
-  const name = this.name.value;
-  const address = this.address.value;
+  const form = e.target;
 
-  console.log("Order Placed:", { food, name, address });
+  const data = {
+    data: {
+      food: form.food.value,
+      name: form.name.value,
+      address: form.address.value
+    }
+  };
 
-  // Show confirmation
-  document.getElementById("confirmation").classList.remove("hidden");
-
-  // Clear form
-  this.reset();
+  fetch("https://sheetdb.io/api/v1/qwy02wpreu8z3", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(data => {
+      alert("✅ Order placed successfully!");
+      form.reset();
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("❌ Failed to place order. Please try again.");
+    });
 });
