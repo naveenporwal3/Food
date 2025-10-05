@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Function to calculate and update total
   function updateTotal() {
+    console.log('updateTotal called'); // Debug
     let grandTotal = 0;
     cartItems = [];
     foodCards.forEach(card => {
@@ -55,11 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
         cartItems.push({ food, qty });
         const itemPrice = menuItems.find(m => m.name === food)?.price || 0;
         grandTotal += itemPrice * qty;
+        console.log(`Added ${food} x${qty} = ₹${itemPrice * qty}`); // Debug per item
       }
     });
     const totalStr = grandTotal.toFixed(2);
     totalPrice.textContent = `Total: ₹${totalStr}`;
     totalPrice.style.display = grandTotal > 0 ? 'block' : 'none';
+    console.log('Grand Total:', totalStr); // Debug
   }
 
   // Card click to toggle checkbox
@@ -74,24 +77,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Listen for checkbox and qty changes
-  document.addEventListener('change', function(e) {
-    if (e.target.classList.contains('food-checkbox')) {
-      const card = e.target.closest('.food-card');
-      const qtyInput = card.querySelector('.item-qty');
-      qtyInput.style.display = e.target.checked ? 'block' : 'none';
-      if (e.target.checked) {
-        card.classList.add('selected');
-      } else {
-        card.classList.remove('selected');
-      }
-      updateTotal();
+  // Listen for checkbox changes (per card)
+  foodCards.forEach(card => {
+    const checkbox = card.querySelector('.food-checkbox');
+    if (checkbox) {
+      checkbox.addEventListener('change', function() {
+        const qtyInput = card.querySelector('.item-qty');
+        qtyInput.style.display = this.checked ? 'block' : 'none';
+        if (this.checked) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+        updateTotal();
+      });
     }
   });
 
-  document.addEventListener('input', function(e) {
-    if (e.target.classList.contains('item-qty')) {
-      updateTotal();
+  // Listen for qty changes (per card)
+  foodCards.forEach(card => {
+    const qtyInput = card.querySelector('.item-qty');
+    if (qtyInput) {
+      qtyInput.addEventListener('input', function() {
+        console.log('Qty input changed'); // Debug
+        updateTotal();
+      });
     }
   });
 
