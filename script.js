@@ -5,64 +5,34 @@ document.addEventListener('DOMContentLoaded', function() {
   const orderDetails = document.getElementById('orderDetails');
   const submitBtn = document.getElementById('submitBtn');
   const loading = document.getElementById('loading');
-  const foodOptions = document.querySelector('.food-options');
+  const foodCards = document.querySelectorAll('.food-card');
 
-  // Menu Items Array - ADD NEW ITEMS HERE (name, price, image file, fallback icon)
-  const menuItems = [
-    { name: 'Pizza', price: 12, image: 'pizza.png', icon: 'fas fa-pizza-slice' },
-    { name: 'Burger', price: 8, image: 'burger.png', icon: 'fas fa-hamburger' },
-    { name: 'Fries', price: 5, image: 'fries.png', icon: 'fas fa-drumstick-bite' },
-    { name: 'Biryani', price: 15, image: 'biryani.png', icon: 'fas fa-rice' },
-    { name: 'Dosa', price: 10, image: 'dosa.png', icon: 'fas fa-utensils' },
-    { name: 'Naan', price: 6, image: 'naan.png', icon: 'fas fa-bread-slice' }
-    // To add: { name: 'Idli', price: 7, image: 'idli.png', icon: 'fas fa-utensils' },
-  ];
+  // Prices for each item
+  const prices = {
+    'Pizza': 12,
+    'Burger': 8,
+    'Fries': 5
+  };
 
   let cartItems = []; // {food, qty}
-  let foodCards = []; // Store for listeners
-
-  // Generate Cards Dynamically
-  menuItems.forEach((item) => {
-    const card = document.createElement('div');
-    card.className = 'food-card';
-    card.dataset.food = item.name;
-    card.innerHTML = `
-      <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-      <i class="${item.icon} fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
-      <span>${item.name} (₹${item.price})</span>
-      <label class="checkbox-label">
-        <input type="checkbox" name="food[]" value="${item.name}" class="food-checkbox">
-        <span class="checkmark"></span>
-      </label>
-      <input type="number" class="item-qty" min="1" value="1" style="display: none;">
-    `;
-    foodOptions.appendChild(card);
-    foodCards.push(card); // Collect for listeners
-  });
-
-  console.log(`${menuItems.length} cards generated!`); // Debug: Check console
 
   // Function to calculate and update total
   function updateTotal() {
-    console.log('updateTotal called'); // Debug
     let grandTotal = 0;
     cartItems = [];
     foodCards.forEach(card => {
       const checkbox = card.querySelector('.food-checkbox');
       const qtyInput = card.querySelector('.item-qty');
-      if (checkbox && checkbox.checked && qtyInput) {
+      if (checkbox.checked && qtyInput) {
         const food = checkbox.value;
         const qty = parseInt(qtyInput.value) || 1;
         cartItems.push({ food, qty });
-        const itemPrice = menuItems.find(m => m.name === food)?.price || 0;
-        grandTotal += itemPrice * qty;
-        console.log(`Added ${food} x${qty} = ₹${itemPrice * qty}`); // Debug per item
+        grandTotal += prices[food] * qty;
       }
     });
     const totalStr = grandTotal.toFixed(2);
     totalPrice.textContent = `Total: ₹${totalStr}`;
     totalPrice.style.display = grandTotal > 0 ? 'block' : 'none';
-    console.log('Grand Total:', totalStr); // Debug
   }
 
   // Card click to toggle checkbox
@@ -70,39 +40,29 @@ document.addEventListener('DOMContentLoaded', function() {
     card.addEventListener('click', function(e) {
       if (e.target.tagName === 'INPUT') return; // Avoid double-toggle on qty
       const checkbox = card.querySelector('.food-checkbox');
-      if (checkbox) {
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change'));
-      }
+      const qtyInput = card.querySelector('.item-qty');
+      checkbox.checked = !checkbox.checked;
+      checkbox.dispatchEvent(new Event('change'));
     });
   });
 
-  // Listen for checkbox changes (per card)
-  foodCards.forEach(card => {
-    const checkbox = card.querySelector('.food-checkbox');
-    if (checkbox) {
-      checkbox.addEventListener('change', function() {
-        const qtyInput = card.querySelector('.item-qty');
-        qtyInput.style.display = this.checked ? 'block' : 'none';
-        if (this.checked) {
-          card.classList.add('selected');
-        } else {
-          card.classList.remove('selected');
-        }
-        updateTotal();
-      });
-    }
+  // Listen for checkbox and qty changes
+  document.querySelectorAll('.food-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      const card = this.closest('.food-card');
+      const qtyInput = card.querySelector('.item-qty');
+      qtyInput.style.display = this.checked ? 'block' : 'none';
+      if (this.checked) {
+        card.classList.add('selected');
+      } else {
+        card.classList.remove('selected');
+      }
+      updateTotal();
+    });
   });
 
-  // Listen for qty changes (per card)
-  foodCards.forEach(card => {
-    const qtyInput = card.querySelector('.item-qty');
-    if (qtyInput) {
-      qtyInput.addEventListener('input', function() {
-        console.log('Qty input changed'); // Debug
-        updateTotal();
-      });
-    }
+  document.querySelectorAll('.item-qty').forEach(qtyInput => {
+    qtyInput.addEventListener('input', updateTotal);
   });
 
   // Initial update
@@ -130,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         name: name,
         address: address,
         cart: JSON.stringify(cartItems), // Array as JSON
-        total: cartItems.reduce((sum, item) => sum + (menuItems.find(m => m.name === item.food)?.price || 0) * item.qty, 0).toFixed(2),
+        total: cartItems.reduce((sum, item) => sum + prices[item.food] * item.qty, 0).toFixed(2),
         timestamp: new Date().toISOString()
       }
     };
@@ -168,3 +128,4 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   });
 });
+
