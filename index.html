@@ -30,7 +30,36 @@
             <div class="food-grid">
               <label class="food-label">Food Items (Select Multiple):</label>
               <div class="food-options">
-                <!-- Cards generated dynamically by JS -->
+                <div class="food-card" data-food="Pizza">
+                  <img src="pizza.png" alt="Pizza" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <i class="fas fa-pizza-slice fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
+                  <span>Pizza (₹12)</span>
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="food[]" value="Pizza" class="food-checkbox">
+                    <span class="checkmark"></span>
+                  </label>
+                  <input type="number" class="item-qty" min="1" value="1" style="display: none;">
+                </div>
+                <div class="food-card" data-food="Burger">
+                  <img src="burger.png" alt="Burger" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <i class="fas fa-hamburger fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
+                  <span>Burger (₹8)</span>
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="food[]" value="Burger" class="food-checkbox">
+                    <span class="checkmark"></span>
+                  </label>
+                  <input type="number" class="item-qty" min="1" value="1" style="display: none;">
+                </div>
+                <div class="food-card" data-food="Fries">
+                  <img src="fries.png" alt="Fries" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <i class="fas fa-drumstick-bite fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
+                  <span>Fries (₹5)</span>
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="food[]" value="Fries" class="food-checkbox">
+                    <span class="checkmark"></span>
+                  </label>
+                  <input type="number" class="item-qty" min="1" value="1" style="display: none;">
+                </div>
               </div>
             </div>
 
