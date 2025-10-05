@@ -3,40 +3,87 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Food Order App</title>
+    <title>QuickBite - Order Your Food</title>
     <link rel="stylesheet" href="style.css" />
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   </head>
   <body>
-    <div class="container">
-      <h1>Order Your Food</h1>
-      <form id="orderForm">
-        <label>Food Item:</label>
-        <select name="food" id="foodSelect" required>
-          <option value="">-- Choose a food --</option>
-          <option value="Pizza">Pizza (₹12)</option>
-          <option value="Burger">Burger (₹8)</option>
-          <option value="Fries">Fries (₹5)</option>
-        </select>
-
-        <label>Quantity:</label>
-        <input type="number" name="quantity" id="quantity" min="1" value="1" required />
-
-        <label>Your Name:</label>
-        <input type="text" name="name" required />
-
-        <label>Address:</label>
-        <textarea name="address" required></textarea>
-
-        <div id="totalPrice" class="total-price">Total: ₹0.00</div>
-
-        <button type="submit">Place Order</button>
-      </form>
-
-      <div id="confirmation" class="hidden">
-        ✅ Your order has been placed! Thank you.<br>
-        <strong>Details:</strong> <span id="orderDetails"></span>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <i class="fas fa-utensils"></i>
+          <span>QuickBite</span>
+        </div>
+        <h2>Delicious Food Delivered Fast</h2>
       </div>
-    </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="container">
+        <div class="form-card">
+          <h1>Place Your Order</h1>
+          <form id="orderForm">
+            <!-- Food Selection with Images -->
+            <div class="food-grid">
+              <label class="food-label">Food Item:</label>
+              <div class="food-options">
+                <div class="food-card" data-food="Pizza">
+                  <img src="https://source.unsplash.com/100x100/?pizza" alt="Pizza" loading="lazy">
+                  <span>Pizza (₹12)</span>
+                  <input type="radio" name="food" value="Pizza" id="pizza" required>
+                </div>
+                <div class="food-card" data-food="Burger">
+                  <img src="https://source.unsplash.com/100x100/?burger" alt="Burger" loading="lazy">
+                  <span>Burger (₹8)</span>
+                  <input type="radio" name="food" value="Burger" id="burger">
+                </div>
+                <div class="food-card" data-food="Fries">
+                  <img src="https://source.unsplash.com/100x100/?fries" alt="Fries" loading="lazy">
+                  <span>Fries (₹5)</span>
+                  <input type="radio" name="food" value="Fries" id="fries">
+                </div>
+              </div>
+            </div>
+
+            <label>Quantity:</label>
+            <input type="number" name="quantity" id="quantity" min="1" value="1" required />
+
+            <label>Your Name:</label>
+            <input type="text" name="name" required />
+
+            <label>Address:</label>
+            <textarea name="address" required></textarea>
+
+            <div id="totalPrice" class="total-price">Total: ₹0.00</div>
+
+            <button type="submit" id="submitBtn">
+              <i class="fas fa-shopping-cart"></i> Place Order
+            </button>
+
+            <!-- Loading Spinner -->
+            <div id="loading" class="loading hidden">
+              <i class="fas fa-spinner fa-spin"></i> Processing...
+            </div>
+          </form>
+
+          <div id="confirmation" class="confirmation hidden">
+            <i class="fas fa-check-circle"></i>
+            <strong>Your order has been placed! Thank you.</strong><br>
+            <span id="orderDetails"></span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2025 QuickBite. All rights reserved.</p>
+      </div>
+    </footer>
 
     <script src="script.js"></script>
   </body>
