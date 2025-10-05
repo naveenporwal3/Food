@@ -11,12 +11,15 @@
       <h1>Order Your Food</h1>
       <form id="orderForm">
         <label>Food Item:</label>
-        <select name="food" required>
+        <select name="food" id="foodSelect" required>
           <option value="">-- Choose a food --</option>
-          <option value="Pizza">Pizza</option>
-          <option value="Burger">Burger</option>
-          <option value="Fries">Fries</option>
+          <option value="Pizza">Pizza (₹12)</option>
+          <option value="Burger">Burger (₹8)</option>
+          <option value="Fries">Fries (₹5)</option>
         </select>
+
+        <label>Quantity:</label>
+        <input type="number" name="quantity" id="quantity" min="1" value="1" required />
 
         <label>Your Name:</label>
         <input type="text" name="name" required />
@@ -24,11 +27,14 @@
         <label>Address:</label>
         <textarea name="address" required></textarea>
 
+        <div id="totalPrice" class="total-price">Total: ₹0.00</div>
+
         <button type="submit">Place Order</button>
       </form>
 
       <div id="confirmation" class="hidden">
-        ✅ Your order has been placed! Thank you.
+        ✅ Your order has been placed! Thank you.<br>
+        <strong>Details:</strong> <span id="orderDetails"></span>
       </div>
     </div>
 
