@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const confirmation = document.getElementById('confirmation');
   const totalPrice = document.getElementById('totalPrice');
   const orderDetails = document.getElementById('orderDetails');
-  const foodSelect = document.getElementById('foodSelect');
   const quantity = document.getElementById('quantity');
+  const foodCards = document.querySelectorAll('.food-card'); // For card clicks
 
-  console.log('Elements found:', { foodSelect: !!foodSelect, quantity: !!quantity, totalPrice: !!totalPrice }); // Debug
+  console.log('Elements found:', { quantity: !!quantity, totalPrice: !!totalPrice, foodCards: foodCards.length }); // Debug
 
   // Prices for each item
   const prices = {
@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Function to calculate and update total
   function updateTotal() {
     console.log('updateTotal called'); // Debug
-    const food = foodSelect.value;
+    const selectedFoodInput = document.querySelector('input[name="food"]:checked');
+    const food = selectedFoodInput ? selectedFoodInput.value : '';
     const qty = parseInt(quantity.value) || 1;
     console.log('Food:', food, 'Qty:', qty); // Debug
     if (food && prices[food]) {
@@ -33,9 +34,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Listen for changes on food and quantity
-  if (foodSelect) foodSelect.addEventListener('change', updateTotal);
+  // Listen for quantity changes
   if (quantity) quantity.addEventListener('input', updateTotal);
+
+  // Listen for card clicks to select radio
+  foodCards.forEach(card => {
+    card.addEventListener('click', function() {
+      const radio = card.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.checked = true;
+        radio.dispatchEvent(new Event('change'));
+        // Visual feedback: Add 'selected' class
+        foodCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        console.log('Card selected:', radio.value); // Debug
+      }
+    });
+  });
+
+  // Backup: Listen for radio changes
+  const radios = document.querySelectorAll('input[name="food"]');
+  radios.forEach(radio => radio.addEventListener('change', updateTotal));
 
   // Initial update
   updateTotal();
