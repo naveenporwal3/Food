@@ -101,6 +101,11 @@ body {
   box-shadow: 0 3px 10px rgba(255,107,107,0.2); /* Softer */
 }
 
+.food-card.selected {
+  border-color: #ff6b6b !important;
+  box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3) !important;
+}
+
 .food-card img,
 .fallback-icon {
   width: 60px; /* Squeezed from 80px */
@@ -115,6 +120,10 @@ body {
   font-size: 0.85rem; /* Smaller text */
   font-weight: bold; 
   color: #555; 
+}
+
+.food-card.selected span {
+  color: #ff6b6b !important;
 }
 
 .food-card input[type="radio"] {
