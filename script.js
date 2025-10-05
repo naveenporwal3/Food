@@ -19,32 +19,28 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
 
   let cartItems = []; // {food, qty}
+  let foodCards = []; // Store for listeners
 
   // Generate Cards Dynamically
-  try {
-    menuItems.forEach((item) => {
-      const card = document.createElement('div');
-      card.className = 'food-card';
-      card.dataset.food = item.name;
-      card.innerHTML = `
-        <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-        <i class="${item.icon} fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
-        <span>${item.name} (₹${item.price})</span>
-        <label class="checkbox-label">
-          <input type="checkbox" name="food[]" value="${item.name}" class="food-checkbox">
-          <span class="checkmark"></span>
-        </label>
-        <input type="number" class="item-qty" min="1" value="1" style="display: none;">
-      `;
-      foodOptions.appendChild(card);
-    });
-    console.log(`${menuItems.length} cards generated!`); // Debug: Check console
-  } catch (error) {
-    console.error('Card generation failed:', error);
-    foodOptions.innerHTML = '<p>Menu loading error—refresh page.</p>'; // Fallback
-  }
+  menuItems.forEach((item) => {
+    const card = document.createElement('div');
+    card.className = 'food-card';
+    card.dataset.food = item.name;
+    card.innerHTML = `
+      <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="${item.icon} fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
+      <span>${item.name} (₹${item.price})</span>
+      <label class="checkbox-label">
+        <input type="checkbox" name="food[]" value="${item.name}" class="food-checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <input type="number" class="item-qty" min="1" value="1" style="display: none;">
+    `;
+    foodOptions.appendChild(card);
+    foodCards.push(card); // Collect for listeners
+  });
 
-  const foodCards = document.querySelectorAll('.food-card');
+  console.log(`${menuItems.length} cards generated!`); // Debug: Check console
 
   // Function to calculate and update total
   function updateTotal() {
