@@ -31,17 +31,20 @@
               <label class="food-label">Food Item:</label>
               <div class="food-options">
                 <div class="food-card" data-food="Pizza">
-                  <img src="https://source.unsplash.com/100x100/?pizza" alt="Pizza" loading="lazy">
+                  <img src="pizza.png" alt="Pizza" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <i class="fas fa-pizza-slice fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
                   <span>Pizza (₹12)</span>
                   <input type="radio" name="food" value="Pizza" id="pizza" required>
                 </div>
                 <div class="food-card" data-food="Burger">
-                  <img src="https://source.unsplash.com/100x100/?burger" alt="Burger" loading="lazy">
+                  <img src="burger.png" alt="Burger" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <i class="fas fa-hamburger fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
                   <span>Burger (₹8)</span>
                   <input type="radio" name="food" value="Burger" id="burger">
                 </div>
                 <div class="food-card" data-food="Fries">
-                  <img src="https://source.unsplash.com/100x100/?fries" alt="Fries" loading="lazy">
+                  <img src="fries.png" alt="Fries" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <i class="fas fa-drumstick-bite fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
                   <span>Fries (₹5)</span>
                   <input type="radio" name="food" value="Fries" id="fries">
                 </div>
