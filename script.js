@@ -5,16 +5,40 @@ document.addEventListener('DOMContentLoaded', function() {
   const orderDetails = document.getElementById('orderDetails');
   const submitBtn = document.getElementById('submitBtn');
   const loading = document.getElementById('loading');
+  const foodOptions = document.querySelector('.food-options');
+
+  // Menu Items Array - ADD NEW ITEMS HERE (name, price, image file, fallback icon)
+  const menuItems = [
+    { name: 'Pizza', price: 12, image: 'pizza.png', icon: 'fas fa-pizza-slice' },
+    { name: 'Burger', price: 8, image: 'burger.png', icon: 'fas fa-hamburger' },
+    { name: 'Fries', price: 5, image: 'fries.png', icon: 'fas fa-drumstick-bite' },
+    { name: 'Biryani', price: 15, image: 'biryani.png', icon: 'fas fa-rice' },
+    { name: 'Dosa', price: 10, image: 'dosa.png', icon: 'fas fa-utensils' },
+    { name: 'Naan', price: 6, image: 'naan.png', icon: 'fas fa-bread-slice' }
+    // Example: { name: 'Idli', price: 7, image: 'idli.png', icon: 'fas fa-utensils' },
+  ];
+
+  let cartItems = []; // {name, qty}
+
+  // Generate Cards Dynamically
+  menuItems.forEach((item, index) => {
+    const card = document.createElement('div');
+    card.className = 'food-card';
+    card.dataset.food = item.name;
+    card.innerHTML = `
+      <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas ${item.icon} fallback-icon" style="display: none; font-size: 3rem; color: #ff6b6b;"></i>
+      <span>${item.name} (₹${item.price})</span>
+      <label class="checkbox-label">
+        <input type="checkbox" name="food[]" value="${item.name}" class="food-checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <input type="number" class="item-qty" min="1" value="1" style="display: none;">
+    `;
+    foodOptions.appendChild(card);
+  });
+
   const foodCards = document.querySelectorAll('.food-card');
-
-  // Prices for each item
-  const prices = {
-    'Pizza': 12,
-    'Burger': 8,
-    'Fries': 5
-  };
-
-  let cartItems = []; // {food, qty}
 
   // Function to calculate and update total
   function updateTotal() {
@@ -27,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const food = checkbox.value;
         const qty = parseInt(qtyInput.value) || 1;
         cartItems.push({ food, qty });
-        grandTotal += prices[food] * qty;
+        grandTotal += menuItems.find(m => m.name === food).price * qty;
       }
     });
     const totalStr = grandTotal.toFixed(2);
@@ -47,22 +71,24 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Listen for checkbox and qty changes
-  document.querySelectorAll('.food-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-      const card = this.closest('.food-card');
+  document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('food-checkbox')) {
+      const card = e.target.closest('.food-card');
       const qtyInput = card.querySelector('.item-qty');
-      qtyInput.style.display = this.checked ? 'block' : 'none';
-      if (this.checked) {
+      qtyInput.style.display = e.target.checked ? 'block' : 'none';
+      if (e.target.checked) {
         card.classList.add('selected');
       } else {
         card.classList.remove('selected');
       }
       updateTotal();
-    });
+    }
   });
 
-  document.querySelectorAll('.item-qty').forEach(qtyInput => {
-    qtyInput.addEventListener('input', updateTotal);
+  document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('item-qty')) {
+      updateTotal();
+    }
   });
 
   // Initial update
@@ -90,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         name: name,
         address: address,
         cart: JSON.stringify(cartItems), // Array as JSON
-        total: cartItems.reduce((sum, item) => sum + prices[item.food] * item.qty, 0).toFixed(2),
+        total: cartItems.reduce((sum, item) => sum + menuItems.find(m => m.name === item.food).price * item.qty, 0).toFixed(2),
         timestamp: new Date().toISOString()
       }
     };
